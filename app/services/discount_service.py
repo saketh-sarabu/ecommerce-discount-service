@@ -76,6 +76,7 @@ class DiscountService:
         if payment_info:
             price = self._apply_bank_offer(payment_info, price, applied)
 
+        price = max(price, Decimal("0.00"))
         total_saved = original_price - price
         message = f"You saved ₹{total_saved:,.2f}!" if total_saved > 0 else "No discounts applied."
 
