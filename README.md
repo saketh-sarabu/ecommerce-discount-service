@@ -11,14 +11,6 @@ Fashion e-commerce discount calculator. Applies brand, category, voucher, and ba
 - **Data layer:** in-memory seed data (`app/db/fake_data.py`) — no database used
 - **Docs:** interactive OpenAPI UI at `http://localhost:8000/docs`
 
-### Scenario (seed data)
-
-| Item | Base Price | Discounts Applied |
-|------|-----------|-------------------|
-| PUMA T-shirt (size M) | ₹1000 | 40% brand → 10% category → 10% ICICI bank |
-
-Final price with all three: **₹486**
-
 ---
 
 ## Project Structure
@@ -97,6 +89,14 @@ pytest tests/ -v
 Full request/response reference: [`documentation/API.md`](documentation/API.md)
 
 ### Quick example
+
+#### Scenario (seed data)
+
+| Item | Base Price | Discounts Applied |
+|------|-----------|-------------------|
+| PUMA T-shirt (size M) | ₹1000 | 40% brand → 10% category → 10% ICICI bank |
+
+Final price with all three: **₹486**
 
 ```bash
 curl --location 'http://localhost:8000/v1/cart/calculate' \

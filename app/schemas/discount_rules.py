@@ -3,7 +3,7 @@
 from decimal import Decimal
 from typing import List, Optional
 from pydantic import BaseModel, Field
-from app.models.discount import CustomerTier, DiscountType
+from app.models.discount import CardType, CustomerTier, DiscountType
 
 
 class DiscountRule(BaseModel):
@@ -38,5 +38,5 @@ class VoucherDiscount(DiscountRule):
 class BankOffer(DiscountRule):
     """Instant discount tied to a specific bank (and optionally card type)."""
     bank_name: str = Field(description="Bank to match against payment info (case-insensitive).", examples=["ICICI"])
-    card_type: Optional[str] = Field(default=None, description="Restrict to CREDIT or DEBIT. Null means both are eligible.", examples=["CREDIT"])
+    card_type: Optional[CardType] = Field(default=None, description="Restrict to CREDIT or DEBIT. Null means both are eligible.", examples=["CREDIT"])
     discount_type: DiscountType = DiscountType.BANK

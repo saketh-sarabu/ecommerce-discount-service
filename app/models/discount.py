@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Dict, Literal, Optional
 
 
 class BrandTier(str, Enum):
@@ -26,6 +26,10 @@ class CustomerTier(str, Enum):
     PLATINUM = "platinum"
 
 
+class CardType(str, Enum):
+    CREDIT  = "credit", 
+    DEBIT   = "debit"
+
 @dataclass
 class Product:
     id: str
@@ -33,7 +37,7 @@ class Product:
     brand_tier: BrandTier
     category: str
     base_price: Decimal
-    current_price: Decimal  # after brand/category discount
+    current_price: Decimal  # After brand/category discount
 
 
 @dataclass
@@ -45,9 +49,9 @@ class CartItem:
 
 @dataclass
 class PaymentInfo:
-    method: str               # CARD, UPI, etc.
+    method: str               # CARD, UPI, etc
     bank_name: Optional[str]
-    card_type: Optional[str]  # CREDIT, DEBIT
+    card_type: Optional[CardType]
 
 
 @dataclass

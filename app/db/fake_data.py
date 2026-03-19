@@ -11,7 +11,7 @@ Scenario:
 
 from decimal import Decimal
 
-from app.models.discount import BrandTier, CartItem, CustomerTier, PaymentInfo, Product
+from app.models.discount import BrandTier, CardType, CartItem, CustomerTier, PaymentInfo, Product
 from app.schemas.discount_rules import (
     BankOffer,
     BrandDiscount,
@@ -38,7 +38,7 @@ SAMPLE_CART: list[CartItem] = [
     CartItem(product=PRODUCTS["11111111-1111-4111-8111-111111111111"], quantity=1, size="M"),
 ]
 
-ICICI_PAYMENT = PaymentInfo(method="CARD", bank_name="ICICI", card_type="CREDIT")
+ICICI_PAYMENT = PaymentInfo(method="CARD", bank_name="ICICI", card_type=CardType.CREDIT)
 
 # ── Discount rules ────────────────────────────────────────────────────────────
 

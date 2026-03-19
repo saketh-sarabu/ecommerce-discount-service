@@ -4,13 +4,13 @@ from uuid import UUID
 from decimal import Decimal
 from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
-from app.models.discount import CustomerTier
+from app.models.discount import CardType, CustomerTier
 
 
 class PaymentInfoSchema(BaseModel):
     method: str = Field(description="Payment method used at checkout.", examples=["CARD"])
     bank_name: Optional[str] = Field(default=None, description="Required when method is CARD.", examples=["ICICI"])
-    card_type: Optional[str] = Field(default=None, description="CREDIT or DEBIT.", examples=["CREDIT"])
+    card_type: Optional[CardType] = Field(default=None, description="CREDIT or DEBIT.", examples=["CREDIT"])
 
 
 class CartRequest(BaseModel):
