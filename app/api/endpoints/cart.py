@@ -3,7 +3,7 @@
 from fastapi import APIRouter, HTTPException
 
 from app.db.fake_data import PRODUCTS
-from app.models.discount import PaymentInfo
+from app.models.domain import CartItem, PaymentInfo
 from app.schemas.cart import CartDiscountResponse, CartRequest
 from app.services.discount_service import DiscountService
 
@@ -47,7 +47,6 @@ async def calculate_cart_discounts(body: CartRequest) -> CartDiscountResponse:
         product = PRODUCTS.get(str(pid))
         if not product:
             raise HTTPException(status_code=404, detail=f"Product '{pid}' not found.")
-        from app.models.discount import CartItem
         cart_items.append(CartItem(product=product, quantity=1, size="M"))
 
     payment = None

@@ -19,8 +19,8 @@ from app.db.fake_data import (
     SAMPLE_CART,
     VOUCHERS,
 )
-from app.models.discount import CustomerTier
-from app.schemas.discount_rules import VoucherDiscount
+from app.models.discount import VoucherDiscount
+from app.models.enums import CustomerTier
 from app.services.discount_service import DiscountService
 
 

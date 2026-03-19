@@ -11,13 +11,9 @@ Scenario:
 
 from decimal import Decimal
 
-from app.models.discount import BrandTier, CardType, CartItem, CustomerTier, PaymentInfo, Product
-from app.schemas.discount_rules import (
-    BankOffer,
-    BrandDiscount,
-    CategoryDiscount,
-    VoucherDiscount,
-)
+from app.models.discount import BankOffer, BrandDiscount, CategoryDiscount, VoucherDiscount
+from app.models.domain import CartItem, PaymentInfo, Product
+from app.models.enums import BrandTier, CardType, CustomerTier
 
 # ── Products ──────────────────────────────────────────────────────────────────
 

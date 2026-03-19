@@ -1,62 +1,42 @@
-"""Domain dataclasses — treated as black boxes per spec."""
+"""Pydantic models for discount rule definitions (stored/validated config)."""
 
-from dataclasses import dataclass
 from decimal import Decimal
-from enum import Enum
-from typing import Dict, Literal, Optional
+from typing import List, Optional
+from pydantic import BaseModel, Field
+from app.models.enums import CardType, CustomerTier, DiscountType
 
 
-class BrandTier(str, Enum):
-    PREMIUM = "premium"
-    REGULAR = "regular"
-    BUDGET  = "budget"
+class DiscountRule(BaseModel):
+    """Base fields shared by every discount rule."""
+    name: str = Field(description="Label shown on the order summary.", examples=["PUMA 40% off"])
+    discount_type: DiscountType = Field(description="Determines which calculation phase this rule belongs to.")
+    percent: Decimal = Field(gt=0, le=100, description="Percentage deducted from the price at that phase.", examples=[10, 40])
+    active: bool = Field(default=True, description="Inactive rules are ignored without deletion.")
 
 
-class DiscountType(str, Enum):
-    BRAND    = "brand"
-    CATEGORY = "category"
-    VOUCHER  = "voucher"
-    BANK     = "bank"
+class BrandDiscount(DiscountRule):
+    """Applies across all categories for a single brand."""
+    brand: str = Field(description="Brand name to match (case-insensitive).", examples=["PUMA"])
+    discount_type: DiscountType = DiscountType.BRAND
 
 
-class CustomerTier(str, Enum):
-    REGULAR  = "regular"
-    SILVER   = "silver"
-    GOLD     = "gold"
-    PLATINUM = "platinum"
+class CategoryDiscount(DiscountRule):
+    """Applies to all products within a category."""
+    category: str = Field(description="Category name to match (case-insensitive).", examples=["t-shirts"])
+    discount_type: DiscountType = DiscountType.CATEGORY
 
 
-class CardType(str, Enum):
-    CREDIT  = "credit", 
-    DEBIT   = "debit"
-
-@dataclass
-class Product:
-    id: str
-    brand: str
-    brand_tier: BrandTier
-    category: str
-    base_price: Decimal
-    current_price: Decimal  # After brand/category discount
+class VoucherDiscount(DiscountRule):
+    """Coupon code redeemable at checkout."""
+    code: str = Field(description="The code customers enter at checkout.", examples=["SUPER69"])
+    excluded_brands: List[str] = Field(default_factory=list, description="Brands excluded from this voucher.", examples=[["Zara", "H&M"]])
+    excluded_categories: List[str] = Field(default_factory=list, description="Categories excluded from this voucher.", examples=[["footwear"]])
+    min_customer_tier: CustomerTier = Field(default=CustomerTier.REGULAR, description="Minimum loyalty tier required to redeem.", examples=["silver"])
+    discount_type: DiscountType = DiscountType.VOUCHER
 
 
-@dataclass
-class CartItem:
-    product: Product
-    quantity: int
-    size: str
-
-
-@dataclass
-class PaymentInfo:
-    method: str               # CARD, UPI, etc
-    bank_name: Optional[str]
-    card_type: Optional[CardType]
-
-
-@dataclass
-class DiscountedPrice:
-    original_price: Decimal
-    final_price: Decimal
-    applied_discounts: Dict[str, Decimal]  # discount_name -> amount saved
-    message: str
+class BankOffer(DiscountRule):
+    """Instant discount tied to a specific bank (and optionally card type)."""
+    bank_name: str = Field(description="Bank to match against payment info (case-insensitive).", examples=["ICICI"])
+    card_type: Optional[CardType] = Field(default=None, description="Restrict to CREDIT or DEBIT. Null means both are eligible.", examples=["CREDIT"])
+    discount_type: DiscountType = DiscountType.BANK

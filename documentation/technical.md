@@ -45,11 +45,13 @@ Handles `POST /v1/voucher/validate`. Resolves product UUIDs, delegates validatio
 ### `app/services/discount_service.py`
 Contains all business logic. Stateless except for rule indexes built at construction time (dicts keyed by brand/category/code for O(1) lookups).
 
-### `app/models/discount.py`
-Domain dataclasses treated as black boxes per spec (`Product`, `CartItem`, `PaymentInfo`, `DiscountedPrice`). No business logic lives here.
+### `app/models/`
+- **`discount.py`** — Pydantic models for discount rules (`BrandDiscount`, `CategoryDiscount`, `VoucherDiscount`, `BankOffer`). All fields carry `description` and `examples` for OpenAPI generation.
+- **`domain.py`** — Domain dataclasses treated as black boxes per spec (`Product`, `CartItem`, `PaymentInfo`, `DiscountedPrice`). No business logic lives here.
+- **`enums.py`** — Shared enum types (`CustomerTier`, `DiscountType`, `BrandTier`, `CardType`).
 
 ### `app/schemas/`
-Pydantic request/response models (`cart.py`, `voucher.py`) and rule configuration models (`discount_rules.py`). All fields carry `description` and `examples` for OpenAPI generation.
+Pydantic request/response models (`cart.py`, `voucher.py`). All fields carry `description` and `examples` for OpenAPI generation.
 
 ### `app/db/fake_data.py`
 In-memory seed data — stands in for a database. Defines the scenario: one PUMA T-shirt at ₹1000, a 40% brand discount, 10% category discount, SUPER69 voucher (69%), and ICICI 10% bank offer.

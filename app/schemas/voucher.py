@@ -3,7 +3,7 @@
 from typing import List, Optional
 from uuid import UUID
 from pydantic import BaseModel, Field
-from app.models.discount import CustomerTier
+from app.models.enums import CustomerTier
 
 
 class ValidateVoucherRequest(BaseModel):

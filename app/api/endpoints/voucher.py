@@ -3,7 +3,7 @@
 from fastapi import APIRouter, HTTPException
 
 from app.db.fake_data import PRODUCTS
-from app.models.discount import CartItem
+from app.models.domain import CartItem
 from app.schemas.voucher import ValidateVoucherRequest, ValidateVoucherResponse
 
 router = APIRouter()
